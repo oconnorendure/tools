@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: itxiu-server
+  profiles:
+    active: ${profile.active}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${eureka.server}

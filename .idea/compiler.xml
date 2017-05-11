@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="api" />
+        <module name="common-model" />
+        <module name="itxiu-server" />
+        <module name="spider" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api" target="1.8" />
+      <module name="common-model" target="1.8" />
+      <module name="itxiu-server" target="1.8" />
+      <module name="spider" target="1.8" />
+      <module name="tools" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
