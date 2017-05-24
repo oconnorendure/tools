@@ -6,9 +6,13 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -32,15 +36,16 @@ public class ImportNewProcesser implements PageProcessor {
             page.putField("detail",page.getHtml());
         }else{
             List<Selectable> articles = page.getHtml().css("div.grid-8").css("div.floated-thumb").nodes();
-            articles.forEach(node ->{
-                  page.addTargetRequest(node.xpath("//div[@class='floated-thumb']/div[@class='post-thumb']/a/@href").toString());
-             });
-
-            //从页面发现后续的url地址来抓取
-            String next = page.getHtml().xpath("//div[@class='navigation']/a[@class='next']/@href").toString();
-            page.addTargetRequest(next);
-            pages ++;
-            log.info("爬取第{}页文章",pages);
+            articles.stream()
+                    .filter(node -> node.xpath("//div[@class='floated-thumb']/div[@class='post-meta']/p").toString()
+                           .contains(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))))
+                    .forEach(node -> page.addTargetRequest(node.xpath("//div[@class='floated-thumb']/div[@class='post-thumb']/a/@href").toString()));
+// 只抓第一页
+//            从页面发现后续的url地址来抓取
+//            String next = page.getHtml().xpath("//div[@class='navigation']/a[@class='next']/@href").toString();
+//            page.addTargetRequest(next);
+//            pages ++;
+//            log.info("爬取第{}页文章",pages);
         }
     }
 

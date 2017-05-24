@@ -3,6 +3,7 @@ package net.itxiu.webmagic.importnew;
 
 import lombok.extern.slf4j.Slf4j;
 import net.itxiu.SpiderApplication;
+import net.itxiu.api.ArticleClient;
 import net.itxiu.model.Article;
 import net.itxiu.model.Content;
 import net.itxiu.model.ContentExt;
@@ -31,7 +32,7 @@ import java.util.regex.Pattern;
 public class ImportNewPagePipeline implements Pipeline {
 
     @Autowired
-    ImgDownloadService imgDownloadService;
+    ArticleClient client;
 
     @Override
     public void process(ResultItems resultItems, Task task) {
@@ -56,14 +57,14 @@ public class ImportNewPagePipeline implements Pipeline {
                                     .build();
 
                             try{
-                                ResponseEntity<Long> response = SpiderApplication.client.saveArticle(article);
+                                ResponseEntity<Long> response = client.saveArticle(article);
                                 log.info("insert article operation code = {} ,article id = {}", response.getCode(), response.getData());
                                 if(ResponseCodeEnum.SUCCESS.getCode().equals(response.getCode())) {
                                     log.info("download content img and save content");
                                     ContentTxt toProcess = article.getContentTxt();
                                     toProcess.setContentId(response.getData().intValue());
-                                    toProcess.setTxt(imgDownloadService.downloadImgAndProcessContent(toProcess.getTxt()));
-                                    ResponseEntity<Long> txtResponse = SpiderApplication.client.saveArticleTxt(toProcess);
+                                    toProcess.setTxt(ImgDownloadService.downloadImgAndProcessContent(toProcess.getTxt()));
+                                    ResponseEntity<Long> txtResponse = client.saveArticleTxt(toProcess);
                                     if(txtResponse.success()){
                                         log.info("process contentTxt success");
                                     }else{
@@ -76,10 +77,5 @@ public class ImportNewPagePipeline implements Pipeline {
                             }
                     });
         }
-    }
-
-    public static void main(String[] args) {
-        Content content = new Content();
-        System.out.println(content);
     }
 }

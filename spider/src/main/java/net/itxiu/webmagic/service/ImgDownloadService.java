@@ -12,12 +12,9 @@ import java.util.regex.Pattern;
  * 图片下载服务
  * Created by huangshaokang on 17/3/14.
  */
-@Service
 @Slf4j
 public class ImgDownloadService {
     //本地图片地址
-//    private static final String PATH = "/www/u/cms/www/";
-//    private static final String PATH = "/tmp/";
     private static final String PATH = "/home/web/download/";
 
     private static final String SEARCH_URL_REG = "src=\"http://.*?\"";
